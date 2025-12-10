@@ -2,7 +2,7 @@ import React from 'react';
 
 const Patients = () => {
     return (
-    <div className="p-6">
+    <div className="main main_page p-6 duration-900">
       <div className="bg-white rounded-2xl shadow-md p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">demo</h1>
         <p className="text-gray-600">
