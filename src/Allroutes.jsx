@@ -6,6 +6,7 @@ import Login from "./Pages/Login/Login";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import NotFound from "./Pages/NotFound/NotFound";
 import Patients from "./Pages/Patients/Patients";
+import WebSettings from "./Pages/Settings/WebSettings";
 
 const Allroutes = () => {
   const [authData, setAuthData] = useState(() =>
@@ -19,7 +20,7 @@ const Allroutes = () => {
 
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/patients" element={<Patients />} />
+            <Route path="/settings" element={<WebSettings />} />
             
           </Route>
           <Route path="*" element={<NotFound />} />
