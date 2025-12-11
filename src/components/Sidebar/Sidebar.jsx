@@ -390,7 +390,7 @@ function Sidebar({ setIs_Toggle, isToggle }) {
           </nav>
 
           {/* Bottom Help Card */}
-          <div className="relative z-10 m-4 p-4 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl text-white shadow-lg animate-slideIn">
+          {/* <div className="relative z-10 m-4 p-4 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl text-white shadow-lg animate-slideIn">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="w-5 h-5 animate-pulse" />
               <h4 className="font-bold">Need Help?</h4>
@@ -401,7 +401,7 @@ function Sidebar({ setIs_Toggle, isToggle }) {
             <button className="w-full py-2 bg-white text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-all duration-300 hover:scale-105 active:scale-95 shadow-md">
               Contact Support
             </button>
-          </div>
+          </div> */}
         </div>
       </aside>
 

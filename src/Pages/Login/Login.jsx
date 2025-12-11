@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../config/config";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,28 +20,51 @@ export default function Login() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const staticEmail = "super@admin.com";
-    const staticPassword = "12345678";
+    try {
+      const response = await fetch(`${BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    setTimeout(() => {
-      if (email === staticEmail && password === staticPassword) {
-        toast.success("Login Successful!", {
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success(result.message || "Login Successful!", {
           position: "top-center",
         });
 
+        // Store user data in localStorage
+        const userData = {
+          token: result.data.token,
+          id: result.data.admin.id,
+          name: result.data.admin.name,
+          email: result.data.admin.email,
+        };
+
+        localStorage.setItem("novaya_auth", JSON.stringify(userData));
+
+        // Navigate to dashboard
         navigate("/dashboard");
       } else {
-        toast.error("Invalid Email or Password!", {
+        toast.error(result.message || "Invalid Email or Password!", {
           position: "top-center",
         });
       }
-
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.", {
+        position: "top-center",
+      });
+      console.error("Login error:", error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

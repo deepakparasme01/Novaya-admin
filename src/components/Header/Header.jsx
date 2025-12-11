@@ -1,18 +1,46 @@
-import React, { useState } from "react";
-import { Search, Bell, LogOut, Menu, ChevronDown, X, Sparkles, Heart } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  Bell,
+  LogOut,
+  Menu,
+  ChevronDown,
+  X,
+  Sparkles,
+  Heart,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Header({ setIs_Toggle, isToggle }) {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const notifications = [
     { id: 1, text: "New appointment request", time: "5 min ago", unread: true },
-    { id: 2, text: "Session completed with Sarah", time: "1 hour ago", unread: true },
-    { id: 3, text: "New message from Dr. Chen", time: "2 hours ago", unread: false },
+    {
+      id: 2,
+      text: "Session completed with Sarah",
+      time: "1 hour ago",
+      unread: true,
+    },
+    {
+      id: 3,
+      text: "New message from Dr. Chen",
+      time: "2 hours ago",
+      unread: false,
+    },
   ];
+
+  useEffect(() => {
+    // Get user data from localStorage
+    const storedUser = localStorage.getItem("novaya_auth");
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <>
@@ -62,19 +90,27 @@ function Header({ setIs_Toggle, isToggle }) {
               onClick={() => setIs_Toggle(!isToggle)}
               className="group relative p-2 hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 rounded-lg transition-all duration-300 hover:scale-110 active:scale-95"
             >
-              <div className={`transition-all duration-500 ${isToggle ? 'rotate-0' : 'rotate-180'}`}>
+              <div
+                className={`transition-all duration-500 ${
+                  isToggle ? "rotate-0" : "rotate-180"
+                }`}
+              >
                 {isToggle ? (
-                  <X className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
+                  <X className="w-6 h-6 text-gray-700 cursor-pointer group-hover:text-blue-600 transition-colors" />
                 ) : (
-                  <Menu className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
+                  <Menu className="w-6 h-6 text-gray-700 cursor-pointer group-hover:text-blue-600 transition-colors" />
                 )}
               </div>
             </button>
 
             {/* Logo - Shows when sidebar is closed */}
-            <div className={`flex items-center gap-2 transition-all duration-700 ${
-              isToggle ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'
-            }`}>
+            <div
+              className={`flex items-center gap-2 transition-all duration-700 ${
+                isToggle
+                  ? "opacity-0 w-0 overflow-hidden"
+                  : "opacity-100 w-auto"
+              }`}
+            >
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-lg flex items-center justify-center shadow-lg animate-pulse-glow">
                 <Heart className="w-6 h-6 text-white" />
               </div>
@@ -88,15 +124,20 @@ function Header({ setIs_Toggle, isToggle }) {
             </div>
 
             {/* Page Title - Shows when sidebar is open */}
-            <div className={`transition-all duration-700 ${
-              isToggle ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'
-            }`}>
+            {/* Page Title - Shows when sidebar is open */}
+            <div
+              className={`transition-all duration-700 ${
+                isToggle ? "opacity-100" : "opacity-0 w-0 overflow-hidden"
+              }`}
+            >
               <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 text-transparent bg-clip-text">
                 Dashboard
               </h2>
               <p className="text-sm text-gray-500 flex items-center gap-1">
-                Welcome back, 
-                <span className="font-semibold text-gray-700">Admin</span>
+                Welcome back,
+                <span className="font-semibold text-gray-700">
+                  {userData?.name || "Admin"}
+                </span>
                 <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               </p>
             </div>
@@ -105,17 +146,16 @@ function Header({ setIs_Toggle, isToggle }) {
           {/* Right Section */}
           <div className="flex items-center gap-3">
             {/* Search Bar */}
-            <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-md group">
+            {/* <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-md group">
               <Search className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Search..."
                 className="bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400 w-48"
               />
-            </div>
-
-            {/* Notifications */}
-            <div className="relative">
+            </div> */}
+            {/* Notifications Dropdown */}
+            {/* <div className="relative">
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 cursor-pointer hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 rounded-lg transition-all duration-300 hover:scale-110 active:scale-95 group"
@@ -124,7 +164,7 @@ function Header({ setIs_Toggle, isToggle }) {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
               </button>
 
-              {/* Notifications Dropdown */}
+            
               {showNotifications && (
                 <div className="absolute right-0 mt-2 w-80 glass-effect rounded-xl shadow-2xl border border-gray-200 animate-slideDown z-50">
                   <div className="p-4 border-b border-gray-200">
@@ -155,7 +195,7 @@ function Header({ setIs_Toggle, isToggle }) {
                   </div>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* User Profile Dropdown */}
             <div className="relative">
@@ -164,15 +204,23 @@ function Header({ setIs_Toggle, isToggle }) {
                 className="flex items-center gap-3 px-3 py-2 cursor-pointer rounded-lg hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 transition-all duration-300 hover:scale-105 active:scale-95 group"
               >
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-teal-400 rounded-full flex items-center justify-center text-white font-semibold shadow-lg group-hover:shadow-xl transition-shadow">
-                  AD
+                  {userData?.name
+                    ? userData.name.substring(0, 2).toUpperCase()
+                    : "AD"}
                 </div>
                 <div className="hidden lg:block text-left">
-                  <p className="text-sm font-semibold text-gray-900">Admin User</p>
-                  <p className="text-xs text-gray-500">admin@novaya.com</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {userData?.name || "Admin User"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userData?.email || "admin@novaya.com"}
+                  </p>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                  showProfileMenu ? 'rotate-180' : ''
-                }`} />
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                    showProfileMenu ? "rotate-180" : ""
+                  }`}
+                />
               </button>
 
               {/* Profile Dropdown Menu */}
@@ -181,11 +229,17 @@ function Header({ setIs_Toggle, isToggle }) {
                   <div className="p-4 border-b border-gray-200">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-teal-400 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                        AD
+                        {userData?.name
+                          ? userData.name.substring(0, 2).toUpperCase()
+                          : "AD"}
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">Admin User</p>
-                        <p className="text-xs text-gray-500">admin@novaya.com</p>
+                        <p className="font-semibold text-gray-900">
+                          {userData?.name || "Admin User"}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {userData?.email || "admin@novaya.com"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -204,6 +258,7 @@ function Header({ setIs_Toggle, isToggle }) {
             {/* Logout Button */}
             <button
               onClick={() => {
+                localStorage.removeItem("novaya_auth"); // Clear user data
                 toast.success("Logout Successful!", {
                   position: "top-center",
                 });
